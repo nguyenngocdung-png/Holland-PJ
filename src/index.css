@@ -1,0 +1,69 @@
+/* ===== Design tokens ===== */
+:root {
+  --bg: #f7f6f5;
+  --surface: #ffffff;
+  --text: #1a1d20;
+  --text-sub: #5f6266;
+  --border: #e7e3e0;
+  --border-strong: #cfc9c5;
+  /* DAY BY KOREA 로고 색상 */
+  --primary: #b00000;
+  --primary-hover: #8c0000;
+  --primary-soft: #fcf0f0;
+  --ink: #1a1d20;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 1px 2px rgba(26, 29, 32, 0.04), 0 4px 16px rgba(26, 29, 32, 0.06);
+  --font: 'Noto Sans', 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+
+  color-scheme: light;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { min-height: 100vh; background: var(--bg); line-height: 1.55; word-break: keep-all; overflow-wrap: anywhere; }
+h1, h2, h3, p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+button { font: inherit; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ===== UI: Card ===== */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+@media (min-width: 720px) { .card { padding: 32px; } }
+
+/* ===== UI: Button ===== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 48px; padding: 10px 20px;
+  border-radius: 12px; border: 1px solid transparent;
+  font-weight: 600; font-size: 15px; cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s, transform .05s;
+}
+.btn:active:not(:disabled) { transform: translateY(1px); }
+.btn:focus-visible { outline: 3px solid color-mix(in srgb, var(--primary) 35%, transparent); outline-offset: 2px; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn--primary { background: var(--primary); color: #fff; }
+.btn--primary:hover:not(:disabled) { background: var(--primary-hover); }
+.btn--secondary { background: var(--surface); color: var(--text); border-color: var(--border); }
+.btn--secondary:hover:not(:disabled) { border-color: var(--border-strong); background: #faf9f8; }
+.btn--ghost { background: transparent; color: var(--primary); }
+.btn--block { display: flex; width: 100%; }
+.btn--lg { min-height: 60px; font-size: 17px; }
+
+/* ===== UI: ProgressBar ===== */
+.progress { width: 100%; height: 8px; border-radius: 999px; background: #ebe7e4; overflow: hidden; }
+.progress__fill { height: 100%; border-radius: inherit; background: var(--primary); transition: width .3s ease; }
