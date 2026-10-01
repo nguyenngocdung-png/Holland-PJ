@@ -6,8 +6,10 @@ import { HOLLAND_TYPES } from '../data/hollandTypes'
 import { RELATED_PROGRAMS } from '../data/relatedPrograms'
 import { TRAITS } from '../data/traits'
 import { UI, type Lang } from '../i18n'
+import { JOBS_SHOWN, jobsForMajor } from '../lib/jobMatch'
 import { recommendMajors } from '../lib/recommend'
 import { findUniversities } from '../lib/universities'
+import JobList from './JobList'
 import UniversityList from './UniversityList'
 import type { HollandResult } from '../lib/scoring'
 
@@ -24,17 +26,22 @@ const colorVar = (color: string) => ({ ['--type-color' as string]: color }) as C
 
 export default function ResultStep({ lang, result, onRestart }: ResultStepProps) {
   const t = UI[lang]
-  const { top3, ranked, code } = result
+  const { top3, ranked, code, scores } = result
   const recommendations = useMemo(
     () =>
       recommendMajors(top3).map((r) => ({
         ...r,
         universities: findUniversities(r.major.programs, RELATED_PROGRAMS[r.major.name.ko]),
+        jobs: jobsForMajor(
+          r.major.name.ko,
+          scores,
+          top3.map((x) => x.type),
+        ),
       })),
-    [top3],
+    [top3, scores],
   )
-  // 개설 대학 목록은 한 번에 한 전공만 펼친다
-  const [openMajor, setOpenMajor] = useState<string | null>(null)
+  // 추천 직업 / 개설 대학 목록은 한 번에 하나만 펼친다
+  const [open, setOpen] = useState<{ major: string; panel: 'jobs' | 'unis' } | null>(null)
   const [first, second, third] = top3.map((r) => TRAITS[r.type][lang])
 
   return (
@@ -85,7 +92,7 @@ export default function ResultStep({ lang, result, onRestart }: ResultStepProps)
         <h2 className="combined__title">{t.combinedTitle(code)}</h2>
         <p className="combined__desc">{t.combinedDesc(code)}</p>
         <ol className="combined__list">
-          {recommendations.map(({ major, fits, universities }) => (
+          {recommendations.map(({ major, fits, universities, jobs }) => (
             <li key={major.name.ko} className="combined__item">
               <div className="combined__head">
                 <span className="combined__name">{major.name[lang]}</span>
@@ -100,8 +107,9 @@ export default function ResultStep({ lang, result, onRestart }: ResultStepProps)
               <p className="combined__why">
                 {t.majorWhy(fits.map((f) => ({ text: f.reason[lang], type: f.type })))}
               </p>
-              <details className="combined__details">
-                <summary>{t.whyToggle}</summary>
+              {/* 추천 이유: 유형별 근거를 바로 노출 */}
+              <div className="combined__details">
+                <p className="combined__details-title">{t.whyToggle}</p>
                 <ul>
                   {fits.map((f) => (
                     <li key={f.type} style={colorVar(HOLLAND_TYPES[f.type].color)}>
@@ -113,21 +121,36 @@ export default function ResultStep({ lang, result, onRestart }: ResultStepProps)
                     </li>
                   ))}
                 </ul>
-              </details>
-              <button
-                type="button"
-                className={`combined__unis-btn${openMajor === major.name.ko ? ' is-open' : ''}`}
-                aria-expanded={openMajor === major.name.ko}
-                onClick={() => setOpenMajor((cur) => (cur === major.name.ko ? null : major.name.ko))}
-              >
-                {t.uniToggle(universities.length)}
-              </button>
-              {openMajor === major.name.ko && (
+              </div>
+              {/* 추천 직업 · 개설 대학은 버튼으로 펼침 */}
+              <div className="combined__actions">
+                {(['jobs', 'unis'] as const).map((panel) => {
+                  const isOpen = open?.major === major.name.ko && open.panel === panel
+                  return (
+                    <button
+                      key={panel}
+                      type="button"
+                      className={`combined__unis-btn${isOpen ? ' is-open' : ''}`}
+                      aria-expanded={isOpen}
+                      onClick={() => setOpen(isOpen ? null : { major: major.name.ko, panel })}
+                    >
+                      {panel === 'jobs' ? t.jobsToggle(Math.min(jobs.length, JOBS_SHOWN)) : t.uniToggle(universities.length)}
+                    </button>
+                  )
+                })}
+              </div>
+              {open?.major === major.name.ko && open.panel === 'jobs' && (
+                <JobList lang={lang} code={code} jobs={jobs} />
+              )}
+              {open?.major === major.name.ko && open.panel === 'unis' && (
                 <UniversityList key={major.name.ko} lang={lang} major={major} universities={universities} />
               )}
             </li>
           ))}
         </ol>
+        <p className="combined__note">
+          {t.jobsDesc} {t.jobsNote}
+        </p>
       </Card>
 
       {/* 4. 유형별 특징 + 유형별 추천 전공 (기존) */}

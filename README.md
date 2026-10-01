@@ -17,14 +17,19 @@ src/
   components/ui/            재사용 UI: Button, Card, ProgressBar
   features/holland/
     MiniHollandTest.tsx     단계 관리 (intro → test → result), 상태는 메모리에만
-    components/             IntroStep, TestStep, ResultStep, LanguageToggle
+    components/             IntroStep, TestStep, ResultStep, LanguageToggle, QuestionNav, JobList, UniversityList
     i18n.ts                 언어 타입(ko/vi) + 화면 고정 문구(UI) 사전
     data/questions.ts       24문항 (KO/VI) + 1~5점 척도
     data/hollandTypes.ts    6유형 설명(KO/VI) + 추천 전공(정적 데이터)
     data/majors.ts          통합 추천용 전공 목록: 전공별 관련 유형(중요도 순) + 유형별 추천 이유
     data/traits.ts          "나의 Holland 특징" 문장 조각 (유형별 lead/middle/tail)
+    data/universities.csv   모집요강 대학·학과·전공 (개설 대학 검색)
+    data/relatedPrograms.ts 개설 대학 검색용 관련 전공 키워드
+    data/jobs.ts            전공별 관련 직업 + 직업 Holland 점수 (탐색용 예시 데이터)
     lib/scoring.ts          점수 합산, 정렬, Top 3 코드 생성
     lib/recommend.ts        Top 3 조합 기반 전공 추천 (활용 유형 수 → 점수 가중합 순)
+    lib/universities.ts     CSV 파싱, 전공명으로 개설 대학 검색
+    lib/jobMatch.ts         전공 → 관련 직업 필터, Holland 성향 매칭 점수로 정렬 (점수는 화면에 표시하지 않음)
     holland.css             기능 전용 스타일
   index.css                 디자인 토큰 + 공통 UI 스타일
 ```

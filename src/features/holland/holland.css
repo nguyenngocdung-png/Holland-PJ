@@ -13,31 +13,89 @@
 .lang-toggle__btn {
   min-height: 32px; padding: 4px 12px; border: 0; border-radius: 999px; background: transparent;
   font-size: 13px; font-weight: 600; color: var(--text-sub); cursor: pointer; transition: background .15s, color .15s;
+  white-space: nowrap;
 }
 .lang-toggle__btn:hover:not(.is-active) { color: var(--text); }
 .lang-toggle__btn.is-active { background: var(--primary); color: #fff; }
 .lang-toggle__btn:focus-visible { outline: 3px solid color-mix(in srgb, var(--primary) 35%, transparent); outline-offset: 2px; }
+@media (max-width: 399px) { .holland__logo { height: 17px; } .lang-toggle__btn { padding: 4px 10px; font-size: 12px; } }
 
 .eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .04em; color: var(--primary); margin-bottom: 12px; }
 
 /* ===== Intro ===== */
-.intro { text-align: center; }
-.intro__title { font-size: 26px; line-height: 1.3; font-weight: 800; letter-spacing: -0.02em; }
-.intro__desc { margin-top: 16px; color: var(--text-sub); font-size: 15px; }
-.intro__chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 24px 0 20px; }
+/* 랜딩 카드: 테두리 없이, 상단에 브랜드 레드가 은은하게 비치는 배경 */
+.intro.card {
+  text-align: center; border: 0; padding: 36px 22px 28px;
+  background: radial-gradient(120% 70% at 50% 0%, var(--primary-soft) 0%, var(--surface) 58%);
+  box-shadow: 0 1px 2px rgba(26, 29, 32, 0.04), 0 16px 48px rgba(26, 29, 32, 0.08);
+}
+.intro__badge {
+  display: inline-block; padding: 5px 12px; border-radius: 999px;
+  font-size: 11.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--primary); background: var(--surface); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 18%, transparent);
+}
+.intro__title { margin-top: 18px; font-size: 30px; line-height: 1.25; font-weight: 800; letter-spacing: -0.035em; text-wrap: balance; }
+.intro__value { margin-top: 12px; font-size: 17px; font-weight: 700; color: var(--primary); letter-spacing: -0.01em; text-wrap: balance; }
+.intro__desc { margin-top: 8px; font-size: 15px; color: var(--text-sub); text-wrap: balance; }
+
+/* 결과에서 받는 것: 아이콘 3개로 짧게 */
+.intro__features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 420px; margin: 28px auto 28px; }
+.intro__features li {
+  display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px 6px;
+  border-radius: 14px; background: var(--surface); box-shadow: 0 1px 2px rgba(26, 29, 32, 0.05), 0 4px 14px rgba(26, 29, 32, 0.05);
+  font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.3;
+}
+.intro__feature-icon {
+  width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
+  font-size: 20px; background: var(--primary-soft);
+}
+
+/* CTA: 브랜드 레드, 또렷하게 */
+.intro__cta.btn {
+  max-width: 420px; margin: 0 auto; min-height: 58px; gap: 10px; border-radius: 14px;
+  font-size: 17px; font-weight: 700; letter-spacing: -0.01em;
+  box-shadow: 0 10px 24px -8px color-mix(in srgb, var(--primary) 60%, transparent);
+  transition: background .15s, box-shadow .2s, transform .15s;
+}
+.intro__cta.btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 14px 28px -8px color-mix(in srgb, var(--primary) 65%, transparent); }
+.intro__cta-arrow { display: inline-block; transition: transform .2s; }
+.intro__cta:hover .intro__cta-arrow { transform: translateX(3px); }
+
+/* 24문항 · 약 3분 · 무료 — CTA 아래 작은 한 줄 */
+.intro__meta { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 12px; font-size: 12.5px; font-weight: 600; color: var(--text-sub); }
+.intro__meta li + li::before { content: '·'; margin: 0 8px; color: var(--border-strong); font-weight: 800; }
+
+/* 6유형: 원래 색상 유지, 하단에 */
+.intro__chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 28px; }
 .type-chip {
-  font-size: 13px; padding: 6px 12px; border-radius: 999px;
+  font-size: 12.5px; padding: 5px 11px; border-radius: 999px;
   background: color-mix(in srgb, var(--type-color) 10%, white);
   color: color-mix(in srgb, var(--type-color) 85%, black);
 }
 .type-chip b { margin-right: 2px; }
-.intro__meta {
-  display: grid; gap: 10px; margin-bottom: 24px; padding: 16px;
-  background: var(--bg); border-radius: var(--radius-sm); font-size: 14px; text-align: left;
+
+@media (min-width: 720px) {
+  .intro.card { padding: 56px 56px 36px; }
+  .intro__title { font-size: 40px; }
+  .intro__value { font-size: 19px; }
+  .intro__desc { font-size: 16px; }
+  .intro__features li { font-size: 14px; }
 }
-.intro__meta li { padding-left: 22px; position: relative; }
-.intro__meta li::before { content: '✓'; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
-@media (min-width: 720px) { .intro__title { font-size: 32px; } }
+@media (prefers-reduced-motion: reduce) { .intro__cta.btn, .intro__cta-arrow { transition: none; } }
+
+/* 검사 안내: 카드 아래 각주 (메인 콘텐츠보다 낮은 우선순위) */
+.intro-about { max-width: 640px; margin: 28px auto 0; padding: 0 8px; text-align: center; }
+.intro-about__title {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700; letter-spacing: .04em; color: var(--text-sub);
+}
+.intro-about__icon {
+  width: 16px; height: 16px; border-radius: 50%; display: grid; place-items: center;
+  font-size: 10.5px; font-weight: 800; font-style: italic; font-family: Georgia, serif;
+  color: var(--surface); background: var(--border-strong);
+}
+.intro-about__text { margin-top: 8px; font-size: 12px; line-height: 1.75; color: var(--text-sub); text-wrap: pretty; }
+.intro-about__text b { color: var(--text); font-weight: 700; }
 
 /* ===== Test ===== */
 .test { display: grid; gap: 16px; }
@@ -135,22 +193,39 @@
   font-size: 12px; font-weight: 800; color: #fff; background: var(--type-color);
 }
 .combined__why { margin-top: 6px; font-size: 14px; color: var(--text-sub); line-height: 1.6; }
-.combined__details { margin-top: 8px; }
-.combined__details summary {
-  display: inline-block; cursor: pointer; font-size: 13px; font-weight: 700; color: var(--primary);
-  list-style: none; border-radius: 6px;
-}
-.combined__details summary::-webkit-details-marker { display: none; }
-.combined__details summary::after { content: ' ▾'; }
-.combined__details[open] summary::after { content: ' ▴'; }
-.combined__details summary:focus-visible { outline: 3px solid color-mix(in srgb, var(--primary) 35%, transparent); outline-offset: 2px; }
-.combined__details ul { display: grid; gap: 6px; margin-top: 10px; padding: 12px; background: var(--bg); border-radius: var(--radius-sm); }
+.combined__details { margin-top: 10px; }
+.combined__details-title { font-size: 13px; font-weight: 700; color: var(--primary); }
+.combined__actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.combined__details ul { display: grid; gap: 6px; margin-top: 8px; padding: 12px; background: var(--bg); border-radius: var(--radius-sm); }
 .combined__details li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; }
 .combined__details li > b {
   flex: none; width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center;
   font-size: 12px; color: #fff; background: var(--type-color);
 }
 .combined__type-name { font-weight: 700; color: var(--type-color); margin-right: 6px; }
+
+/* 전공 → 추천 직업 (버튼으로 펼침, 대학 목록과 같은 패널 스타일) */
+.jobs { margin-top: 10px; padding: 14px; background: var(--bg); border-radius: var(--radius-sm); }
+.jobs__title { font-size: 15px; font-weight: 800; }
+.jobs__list { display: grid; gap: 8px; margin-top: 12px; }
+.jobs__card {
+  display: flex; flex-direction: column; gap: 4px; padding: 10px 12px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+}
+.jobs__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.jobs__name { font-size: 14px; font-weight: 700; }
+.jobs__types { flex: none; display: flex; gap: 3px; }
+.jobs__type {
+  width: 20px; height: 20px; border-radius: 5px; display: grid; place-items: center;
+  font-size: 11px; font-weight: 800; color: var(--type-color);
+  background: color-mix(in srgb, var(--type-color) 10%, white); border: 1px solid color-mix(in srgb, var(--type-color) 30%, white);
+}
+/* 나의 Top 3와 겹치는 유형은 채워서 강조 */
+.jobs__type.is-shared { color: #fff; background: var(--type-color); border-color: var(--type-color); }
+.jobs__link { font-size: 12px; color: var(--text-sub); line-height: 1.5; }
+.jobs__empty { margin-top: 6px; font-size: 13px; color: var(--text-sub); }
+.combined__note { margin-top: 14px; font-size: 12px; color: var(--text-sub); line-height: 1.6; }
+@media (min-width: 720px) { .jobs__list { grid-template-columns: 1fr 1fr; } }
 
 /* 개설 대학 (모집요강 데이터) */
 .combined__unis-btn {
